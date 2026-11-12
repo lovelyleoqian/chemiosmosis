@@ -1,0 +1,8 @@
+﻿node_modules/
+_shots/
+_edgeprof*/
+_ep3/
+shot.js
+zoom.js
+package.json
+package-lock.json

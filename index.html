@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>化学渗透学说 · 互动图解 | 考研生化 &amp; 微生物</title>
+<meta name="description" content="用可交互的呼吸链实验台、旋转的 ATP 合酶和一套完整的质子账本，把米切尔的化学渗透学说讲透。面向考研生物化学与微生物学复习，含解偶联剂、抑制剂、Δp 计算与自测题。">
+<meta name="theme-color" content="#070b14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%230b1220'/><text y='70' x='50' text-anchor='middle' font-size='58' fill='%23ffb347'>H</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="topbar" id="topbar">
+  <div class="wrap bar-inner">
+    <a class="brand" href="#top"><span class="brand-dot"></span>化学渗透</a>
+    <div class="links" id="navLinks">
+      <a href="#lab">实验台</a>
+      <a href="#mechanism">五步</a>
+      <a href="#motor">合酶</a>
+      <a href="#evidence">证据</a>
+      <a href="#math">算一算</a>
+      <a href="#microbe">微生物</a>
+      <a href="#exam">考点</a>
+      <a href="#quiz">自测</a>
+    </div>
+    <div class="bar-tools">
+      <button class="icon-btn" id="themeBtn" title="切换明暗" aria-label="切换明暗">☾</button>
+    </div>
+  </div>
+  <div class="progress-track"><i id="progressBar"></i></div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-orb o1" aria-hidden="true"></div>
+  <div class="hero-orb o2" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <p class="kicker"><span>考研 · 生物化学</span><span>微生物学</span><span>互动图解</span></p>
+    <h1>化学渗透学说</h1>
+    <p class="hero-sub">电子下坡 · 质子爬坡 · ATP 被拧出来</p>
+    <p class="hero-lead">
+      1961 年，米切尔（Peter Mitchell）提出：呼吸链里电子顺电势「下坡」放出的能量，并没有直接塞给 ADP，
+      而是先拿去把 H⁺ 从膜的一侧泵到另一侧，<b>存成一道跨膜的质子电化学梯度</b>；H⁺ 再顺梯度回流，
+      穿过 ATP 合酶这台旋转马达，才把 ADP + Pi 拧成 ATP。
+    </p>
+    <p class="hero-motto">膜是一座水电站 ——<br><span>H⁺ 是被抽上去的水，ATP 合酶是水轮机。</span></p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#lab">进入实验台 <span class="arr">↓</span></a>
+      <button class="btn" id="shareBtn">复制分享链接</button>
+    </div>
+    <ul class="hero-facts">
+      <li><b>1961</b><span>Mitchell 提出<br>1978 年获诺贝尔化学奖</span></li>
+      <li><b>~200<span class="u">mV</span></b><span>质子动力势 Δp<br>典型线粒体内膜</span></li>
+      <li><b>10 / 6</b><span>NADH / FADH₂<br>每对电子泵出的 H⁺</span></li>
+      <li><b>~4</b><span>每合成 1 个 ATP<br>需回流的 H⁺ 数</span></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 01 实验台 ============ -->
+<section class="section" id="lab">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">01 / 实验台</p>
+      <h2>先让这条链跑起来</h2>
+      <p class="sec-desc">
+        下面整块面板，就是一次「呼吸」的实况：左侧是<b>电子传递链</b>，右侧是<b>ATP 合酶</b>。
+        橙色小球是质子（H⁺），青色是电子（e⁻），绿色是 ATP。
+        你可以随时加药、换底物、换膜的类型，看梯度、产热和产物怎么跟着变。
+      </p>
+    </header>
+
+    <div class="stage">
+      <div class="stage-scroll" id="stageScroll">
+        <canvas id="etcCanvas" data-w="1180" data-h="660" aria-label="电子传递链与化学渗透仿真图"></canvas>
+      </div>
+      <p class="stage-hint">← 左右滑动可查看完整图谱 →</p>
+      <div class="stage-caption" id="etcCaption">
+        <b>自由模式</b><span>四种复合体在传递电子，质子在向右「上坡」；右边的 ATP 合酶靠回流的质子转动。</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label">底物</span>
+          <div class="seg" data-group="substrate">
+            <button type="button" data-val="NADH" class="on">NADH</button>
+            <button type="button" data-val="FADH2">琥珀酸（FADH₂）</button>
+          </div>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">膜的类型</span>
+          <div class="seg" data-group="model">
+            <button type="button" data-val="mito" class="on">线粒体内膜</button>
+            <button type="button" data-val="bact">细菌质膜</button>
+          </div>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">速度</span>
+          <input type="range" id="speed" min="0.2" max="2.5" step="0.1" value="1" aria-label="仿真速度">
+          <output id="speedOut">1.0×</output>
+        </div>
+        <div class="ctrl-group ctrl-right">
+          <button class="btn btn-sm" id="pauseBtn" type="button">暂停</button>
+          <button class="btn btn-sm" id="resetBtn" type="button">重置</button>
+        </div>
+      </div>
+
+      <div class="drugs">
+        <span class="ctrl-label">加药</span>
+        <div class="chips">
+          <button class="chip" type="button" data-drug="rotenone" data-tip="复合体 I 抑制剂">鱼藤酮</button>
+          <button class="chip" type="button" data-drug="antimycin" data-tip="复合体 III 抑制剂">抗霉素 A</button>
+          <button class="chip" type="button" data-drug="cyanide" data-tip="复合体 IV 抑制剂">氰化物 CN⁻</button>
+          <button class="chip" type="button" data-drug="oligomycin" data-tip="ATP 合酶 F₀ 抑制剂">寡霉素</button>
+          <span class="chip-sep"></span>
+          <label class="chip-slider">
+            <span>解偶联剂 DNP</span>
+            <input type="range" id="dnp" min="0" max="100" step="1" value="0" aria-label="解偶联剂浓度">
+            <output id="dnpOut">0%</output>
+          </label>
+        </div>
+      </div>
+
+      <div class="readouts">
+        <div class="stat">
+          <div class="stat-k">质子动力势 Δp</div>
+          <div class="stat-v"><b id="rmDp">0</b><span class="u">mV</span></div>
+          <div class="meter"><i id="rmDpBar"></i></div>
+          <div class="stat-sub"><span id="rmDpsi">Δψ 0 mV</span><span id="rmDph">ΔpH 0.00</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">电子传递速率</div>
+          <div class="stat-v"><b id="rmFlux">0</b><span class="u">%</span></div>
+          <div class="meter warm"><i id="rmFluxBar"></i></div>
+          <div class="stat-sub"><span id="rmO2">耗 O₂ 相对值</span><span id="rmO2v">0.0</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">ATP 合成速率</div>
+          <div class="stat-v"><b id="rmAtp">0.0</b><span class="u">个/s</span></div>
+          <div class="meter green"><i id="rmAtpBar"></i></div>
+          <div class="stat-sub"><span>累计产出 <b id="rmAtpTotal">0</b> 个 ATP</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">能量去向</div>
+          <div class="stack" id="rmStack">
+            <i class="s-atp" id="stAtp"></i><i class="s-heat" id="stHeat"></i><i class="s-store" id="stStore"></i>
+          </div>
+          <div class="stat-sub legend-sub">
+            <span><i class="dot g"></i>ATP <b id="rmPctAtp">0%</b></span>
+            <span><i class="dot r"></i>产热 <b id="rmPctHeat">0%</b></span>
+            <span><i class="dot o"></i>储存 <b id="rmPctStore">0%</b></span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">质子账本</div>
+          <dl class="ledger">
+            <div><dt>已泵出</dt><dd><b id="rmPumped">0</b></dd></div>
+            <div><dt>经合酶回流</dt><dd><b id="rmReturned">0</b></dd></div>
+            <div><dt>漏回</dt><dd><b id="rmLeaked">0</b></dd></div>
+          </dl>
+        </div>
+        <div class="stat">
+          <div class="stat-k">P/O 比（当前底物）</div>
+          <div class="stat-v"><b id="rmPO">0.0</b></div>
+          <div class="stat-sub"><span id="rmPOexp">每 2 个电子经磷酸化生成的 ATP 数</span></div>
+        </div>
+      </div>
+
+      <div class="tour">
+        <span class="ctrl-label">分步导览</span>
+        <div class="tour-steps" id="tourSteps">
+          <button type="button" data-step="0">① 筑坝</button>
+          <button type="button" data-step="1">② 泵质子</button>
+          <button type="button" data-step="2">③ 存梯度</button>
+          <button type="button" data-step="3">④ 回流</button>
+          <button type="button" data-step="4">⑤ 拧出 ATP</button>
+          <button type="button" data-step="-1" class="on">自由观察</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><b>自己试三次，比读十遍有用：</b></p>
+      <ul class="trylist">
+        <li><b>把 DNP 拉到 100%</b> —— 看：梯度瞬间塌掉、ATP 归零、但电子传递反而<b>更快</b>、能量全变成热。这就是「解偶联」。</li>
+        <li><b>点寡霉素</b> —— 看：质子回不去，梯度越堆越高，最后把电子传递链「憋停」。这就是<b>呼吸控制</b>，也是寡霉素杀菌的原理。</li>
+        <li><b>换成琥珀酸（FADH₂）</b> —— 看：电子从复合体 II 进入，绕过复合体 I，少泵 4 个 H⁺，ATP 产量掉到 3/5。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 五步机制 ============ -->
+<section class="section alt" id="mechanism">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">02 / 拆开看</p>
+      <h2>五步：能量是怎么被「搬」过去的</h2>
+      <p class="sec-desc">整个学说的骨架只有五步。考研答题时按这五步写，逻辑不会断。</p>
+    </header>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="26" width="52" height="12" rx="6" class="s-fill-dim"/><circle cx="14" cy="20" r="4" class="s-dot"/><circle cx="32" cy="20" r="4" class="s-dot"/><circle cx="50" cy="20" r="4" class="s-dot"/><circle cx="14" cy="44" r="4" class="s-dot2"/><circle cx="32" cy="44" r="4" class="s-dot2"/><circle cx="50" cy="44" r="4" class="s-dot2"/></svg>
+        </div>
+        <h3><span class="n">01</span>筑坝：造一道不漏水的膜</h3>
+        <p>线粒体内膜（细菌则是质膜）对 H⁺ 几乎<b>不通透</b>：磷脂双分子层的疏水核心把质子挡在外面，膜蛋白又排得极密。</p>
+        <p class="note">没有这道「坝」，泵出去多少漏回来多少，能量存不住。所以<b>膜的不通透性本身就是学说的一部分</b>，不是背景条件。</p>
+      </li>
+
+      <li class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="20" y="8" width="24" height="48" rx="7" class="s-fill-dim"/><path d="M32 48 L32 20" class="s-arrow"/><path d="M32 15 L27 23 L37 23 Z" class="s-arrowhead"/><circle cx="32" cy="52" r="3.2" class="s-dot"/></svg>
+        </div>
+        <h3><span class="n">02</span>泵质子：电子下坡，拉着质子爬坡</h3>
+        <p>复合体 I、III、IV 都是<b>质子泵</b>。电子在它们内部传递时释放的自由能，驱动蛋白构象变化，把 H⁺ 从基质（N 侧）泵到膜间隙（P 侧）。</p>
+        <p class="note">一对电子：NADH 路线泵 <b>4+4+2 = 10</b> 个 H⁺；琥珀酸路线绕开复合体 I，只泵 <b>4+2 = 6</b> 个。这就是 P/O 比差异的全部来源。</p>
+      </li>
+
+      <li class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="28" width="52" height="10" rx="5" class="s-fill-dim"/><circle cx="18" cy="12" r="4.2" class="s-dot"/><circle cx="34" cy="12" r="4.2" class="s-dot"/><circle cx="50" cy="12" r="4.2" class="s-dot"/><text x="32" y="16" class="s-txt">+</text></svg>
+        </div>
+        <h3><span class="n">03</span>存梯度：两种能量叠在一起</h3>
+        <p>泵出去的是电荷，也是酸。于是形成两个分量：<b>Δψ</b>（膜电位，外正内负）和 <b>ΔpH</b>（外侧更酸）。两者合起来就是<b>质子动力势 Δp</b>。</p>
+        <p class="formula">Δp = Δψ + 2.303<span class="frac"><i>RT</i><i>F</i></span>·ΔpH ≈ Δψ + 59·ΔpH &nbsp;(mV, 25 ℃)</p>
+        <p class="note">约定：Δψ = ψ<sub>外</sub> − ψ<sub>内</sub>，ΔpH = pH<sub>内</sub> − pH<sub>外</sub>。两式符号必须配套，否则会算反。</p>
+      </li>
+
+      <li class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 10 L50 10 L40 34 L40 56 L24 56 L24 34 Z" class="s-fill-dim"/><path d="M32 14 L32 50" class="s-arrow"/><path d="M32 55 L27 47 L37 47 Z" class="s-arrowhead"/></svg>
+        </div>
+        <h3><span class="n">04</span>回流：质子必须「还回去」</h3>
+        <p>H⁺ 从膜间隙经 <b>F₀</b> 的通道流回基质，顺着电化学梯度「下坡」，释放的自由能约 <b>20 kJ/mol 每质子</b>。</p>
+        <p class="note">关键：这条路<b>只对 H⁺ 开</b>。如果质子从别处漏回去，能量就不经过 ATP 合酶而直接变成热 —— 那是解偶联剂干的事。</p>
+      </li>
+
+      <li class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" class="s-fill-dim"/><circle cx="32" cy="32" r="7" class="s-fill"/><path d="M32 12 A20 20 0 0 1 49 42" class="s-arrow"/><path d="M49 42 L46 32 L52 38 Z" class="s-arrowhead"/></svg>
+        </div>
+        <h3><span class="n">05</span>拧出 ATP：一台真正的旋转马达</h3>
+        <p>质子流带动 F₀ 的 <b>c 环</b>旋转 → 中央 <b>γ 亚基</b>跟着转 → F₁ 三个 β 亚基依次经历 <b>松散 L → 紧密 T → 开放 O</b>，一步结合 ADP+Pi，一步压合成 ATP，一步释放。</p>
+        <p class="note">这就是博耶的<b>结合改变机制</b>（binding change mechanism），他因此获 1997 年诺贝尔化学奖。「酶会转」这件事，是化学渗透学说最漂亮的证据。</p>
+      </li>
+    </ol>
+
+    <div class="versus">
+      <h3 class="versus-title">它推翻了什么？</h3>
+      <div class="versus-grid">
+        <div class="vs-card old">
+          <h4>化学偶联假说（旧）</h4>
+          <p>电子传递时生成一种「高能中间物」<span class="mono">A~B</span>，它直接与 ADP 反应生成 ATP。</p>
+          <p class="vs-fail">✗ 找了几十年，谁也没分离出这个中间物。</p>
+        </div>
+        <div class="vs-arrow">→</div>
+        <div class="vs-card new">
+          <h4>化学渗透假说（Mitchell）</h4>
+          <p>能量先<b>转成物理形式</b>——跨膜质子梯度，再由梯度驱动 ATP 合成。</p>
+          <p class="vs-ok">✓ 梯度真的存在（可测），而且能人工制造。</p>
+        </div>
+      </div>
+      <p class="vs-foot">
+        这个假说的革命性在于：能量不必以化学键的形式中转，它可以暂时以<b>「膜两侧的电荷差 + 酸度差」</b>这种物理形式存着。
+        后来的「局部质子耦合」「膜表面质子池」等修正，只是改细节，不改骨架。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 ATP 合酶 ============ -->
+<section class="section" id="motor">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">03 / 特写</p>
+      <h2>ATP 合酶：全世界最小的旋转马达</h2>
+      <p class="sec-desc">
+        把镜头推近到右边那一台。直径约 10 nm，每秒能转约 100 圈，三个催化位点轮流开工。
+        拖动下面的滑块，你可以改变「转子有多少个齿」——这会直接改变耗多少质子才能做出一个 ATP。
+      </p>
+    </header>
+
+    <div class="stage">
+      <div class="stage-scroll">
+        <canvas id="atpCanvas" data-w="1100" data-h="640" aria-label="ATP 合酶旋转马达动画"></canvas>
+      </div>
+      <p class="stage-hint">← 左右滑动可查看完整图谱 →</p>
+    </div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl-group grow">
+          <span class="ctrl-label">c 环亚基数 <b id="cRingOut">8</b></span>
+          <input type="range" id="cRing" min="8" max="15" step="1" value="8" aria-label="c环亚基数">
+        </div>
+        <div class="ctrl-group grow">
+          <span class="ctrl-label">质子流速 <b id="hFlowOut">100%</b></span>
+          <input type="range" id="hFlow" min="0" max="100" step="1" value="100" aria-label="质子流速">
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">寡霉素</span>
+          <button class="chip" type="button" id="oligoChip">关闭 / 开启</button>
+        </div>
+      </div>
+
+      <div class="readouts three">
+        <div class="stat">
+          <div class="stat-k">转一圈需要</div>
+          <div class="stat-v"><b id="aPerTurn">8</b><span class="u">个 H⁺</span></div>
+          <div class="stat-sub"><span>c 环有 <b id="aC">8</b> 个亚基，每个带 1 个 H⁺</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">每圈产出</div>
+          <div class="stat-v"><b>3</b><span class="u">个 ATP</span></div>
+          <div class="stat-sub"><span>γ 转 360°，三个 β 各合成 1 个</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">理论 H⁺/ATP</div>
+          <div class="stat-v"><b id="aRatio">2.67</b></div>
+          <div class="stat-sub"><span>含 Pi 同向转运的 1 个 H⁺ 后 ≈ <b id="aRatioReal">3.67</b></span></div>
+        </div>
+      </div>
+
+      <div class="callout slim">
+        <p><b>为什么要扣这 1 个 H⁺：</b>线粒体基质里的 Pi 不是白进来的。磷酸要经 <b>Pi/H⁺ 同向转运体</b>逆着梯度被运进基质，本身就要消耗 1 个 H⁺ 的驱动力；
+        ADP/ATP 交换（腺苷酸转运体）还会把 ATP 带出去、把 ADP 带进来，让膜电位再做一次功。所以<b>实际代价 &gt; 理论值</b>，这就是 P/O 比取 2.5 和 1.5 的由来。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 证据 ============ -->
+<section class="section alt" id="evidence">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">04 / 证据</p>
+      <h2>怎么证明「梯度本身就是信号」</h2>
+      <p class="sec-desc">一个假说要立住，得能「只有梯度、没有电子传递」也做出 ATP。下面这个实验就是干这件事的。</p>
+    </header>
+
+    <div class="stage small">
+      <div class="stage-scroll">
+        <canvas id="vesCanvas" data-w="1100" data-h="470" aria-label="脂质体实验：细菌视紫红质驱动 ATP 合成"></canvas>
+      </div>
+      <div class="stage-caption"><b>Racker 的脂质体实验</b><span>点下面的开关，看光怎么变成 ATP。</span></div>
+    </div>
+
+    <div class="panel tight">
+      <div class="controls center">
+        <button class="btn btn-primary" id="lightBtn" type="button">☀ 开灯 / 关灯</button>
+        <div class="ctrl-group">
+          <span class="ctrl-label">解偶联剂</span>
+          <button class="chip" type="button" id="vesDnpChip">DNP</button>
+        </div>
+      </div>
+      <div class="readouts three">
+        <div class="stat"><div class="stat-k">脂质体内部 pH</div><div class="stat-v"><b id="vesPh">7.00</b></div><div class="stat-sub"><span>外部固定 7.00</span></div></div>
+        <div class="stat"><div class="stat-k">跨膜 ΔpH</div><div class="stat-v"><b id="vesDph">0.00</b></div><div class="stat-sub"><span>内部变碱即出现梯度</span></div></div>
+        <div class="stat"><div class="stat-k">累计合成 ATP</div><div class="stat-v"><b id="vesAtp">0</b><span class="u">个</span></div><div class="stat-sub"><span id="vesMsg">等待开灯…</span></div></div>
+      </div>
+    </div>
+
+    <div class="proofs">
+      <h3>四条经典证据，考简答可以直接写</h3>
+      <div class="proof-grid">
+        <article>
+          <h4><span class="tag">①</span>重组脂质体</h4>
+          <p>把<b>细菌视紫红质</b>（只泵质子、不传电子）和 <b>F₀F₁</b> 一起装进人造脂质体。光照 → 内部变碱 → <b>合成 ATP</b>。</p>
+          <p class="note">没有任何电子传递链参与，仅靠光驱动的质子泵就够了。</p>
+        </article>
+        <article>
+          <h4><span class="tag">②</span>人工梯度</h4>
+          <p>把叶绿体类囊体或线粒体放在<b>酸性缓冲液</b>里「喂」一夜，再突然注入含 ADP+Pi 的碱性液，暗中也能爆出一批 ATP。</p>
+          <p class="note">只造了 pH 差，没有电子传递，也能合成 —— 决定性的。</p>
+        </article>
+        <article>
+          <h4><span class="tag">③</span>解偶联剂</h4>
+          <p>2,4-二硝基苯酚（DNP）是脂溶性的弱酸，能带着 H⁺ 穿过膜。梯度被「短路」，ATP 停止，而电子传递反而加速、全部能量变热。</p>
+          <p class="note">历史上 DNP 曾被当成减肥药，因为它在「烧」能量而不让它变成 ATP —— 结果致命，早已禁用。</p>
+        </article>
+        <article>
+          <h4><span class="tag">④</span>呼吸控制</h4>
+          <p>加寡霉素堵住 F₀，质子回不去，梯度升到顶，电子传递链被「憋」得跑不动，耗氧量骤降。</p>
+          <p class="note">反过来说：只要解偶联剂把梯度放掉，耗氧量立刻回升 —— 这是「梯度在调控呼吸」的直接证据。</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="tablewrap">
+      <h3>抑制剂速查表（考研高频，建议背下来）</h3>
+      <table class="tbl">
+        <thead>
+          <tr><th>试剂</th><th>作用靶点</th><th>机制</th><th>结果</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">鱼藤酮 / 阿米妥 / 杀粉蝶菌素</td><td>复合体 I</td><td>阻断 NADH → Q 的电子流</td><td class="warn">NADH 呼吸链停；琥珀酸链仍可运行</td></tr>
+          <tr><td class="mono">丙二酸</td><td>复合体 II</td><td>与琥珀酸结构相似，竞争性抑制琥珀酸脱氢酶</td><td class="warn">FADH₂ 链停</td></tr>
+          <tr><td class="mono">抗霉素 A</td><td>复合体 III</td><td>阻断 Q 循环中的电子传递</td><td class="bad">两条链全停</td></tr>
+          <tr><td class="mono">氰化物 / CO / 叠氮 / H₂S</td><td>复合体 IV</td><td>与血红素 a₃ 结合，O₂ 无法被还原</td><td class="bad">两条链全停，细胞窒息</td></tr>
+          <tr><td class="mono">寡霉素</td><td>ATP 合酶 F₀</td><td>堵死质子通道</td><td class="warn">ATP 停；梯度↑；电子传递被憋停</td></tr>
+          <tr><td class="mono">苍术苷</td><td>腺苷酸转运体</td><td>ADP 运不进、ATP 运不出</td><td class="warn">基质内缺乏底物，ATP 合成下降</td></tr>
+          <tr class="hi"><td class="mono">2,4-二硝基苯酚（DNP）</td><td>膜本身</td><td>脂溶性弱酸，携 H⁺ 穿膜「短路」</td><td class="bad">梯度塌陷、ATP 停、产热剧增</td></tr>
+          <tr class="hi"><td class="mono">缬氨霉素</td><td>K⁺ 载体</td><td>把 K⁺ 运进基质，抵消膜电位 Δψ</td><td class="warn">部分解偶联（只拆掉 Δψ 那一半）</td></tr>
+        </tbody>
+      </table>
+      <p class="tbl-note">
+        辨析：<b>抑制剂</b>是堵住某段通路（电子流或质子流），<b>解偶联剂</b>不堵任何一段，而是给质子开了一条「旁路」，让梯度与 ATP 合成脱钩。
+        考试问「为什么 DNP 中毒后耗氧反而增加」，答案就在这里。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 算一算 ============ -->
+<section class="section" id="math">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">05 / 算一算</p>
+      <h2>这道梯度到底值多少钱</h2>
+      <p class="sec-desc">拖动滑块，看 Δp 和每个质子的「含金量」。这是判断「能量够不够合成一个 ATP」的标准算法。</p>
+    </header>
+
+    <div class="calc">
+      <div class="calc-inputs">
+        <label class="calc-row">
+          <span>膜电位 Δψ <b id="vPsi">150</b> mV</span>
+          <input type="range" id="iPsi" min="-50" max="220" step="1" value="150">
+        </label>
+        <label class="calc-row">
+          <span>ΔpH（内 − 外） <b id="vPh">1.0</b></span>
+          <input type="range" id="iPh" min="-1" max="3.5" step="0.05" value="1">
+        </label>
+        <label class="calc-row">
+          <span>c 环亚基数 <b id="vC">8</b></span>
+          <input type="range" id="iC" min="8" max="15" step="1" value="8">
+        </label>
+        <p class="calc-hint">25 ℃ 下 2.303RT/F = 59 mV。设置负值可以看看「反向」时会发生什么。</p>
+      </div>
+
+      <div class="calc-outputs">
+        <div class="calc-big">
+          <span class="cb-k">质子动力势 Δp</span>
+          <span class="cb-v"><b id="oDp">209</b> mV</span>
+          <div class="meter"><i id="oDpBar"></i></div>
+        </div>
+        <ul class="calc-list">
+          <li><span>每个 H⁺ 回流的自由能 |ΔG|</span><b id="oG">20.2</b><em>kJ/mol</em></li>
+          <li><span>理论 H⁺/ATP（c/3）</span><b id="oRatio">2.67</b></li>
+          <li><span>含 Pi 转运后实际 H⁺/ATP</span><b id="oRatioReal">3.67</b></li>
+          <li><span>合成 1 个 ATP 的「能量成本」</span><b id="oCost">74</b><em>kJ/mol</em></li>
+          <li><span>生理条件下 ATP 水解 ΔG</span><b>≈ 50</b><em>kJ/mol</em></li>
+        </ul>
+        <div class="calc-verdict" id="oVerdict">
+          <b>结论</b><span>—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout slim">
+      <p><b>为什么必须 3 个以上质子？</b>生理条件下合成 1 个 ATP 需要约 50 kJ/mol，而 1 个质子过膜只放出约 20 kJ/mol。
+      50 ÷ 20 ≈ 2.5，再加上 Pi 转运和腺苷酸交换的额外消耗，实际落在 3～4 之间。
+      <b>这就是「化学渗透」在数量上的自洽</b>：不需要任何神奇的高能中间物，普通的热力学就够了。</p>
+    </div>
+
+    <div class="tablewrap">
+      <h3>顺手记一下：一分子葡萄糖彻底氧化能得多少 ATP</h3>
+      <table class="tbl compact">
+        <thead><tr><th>阶段</th><th>直接产 ATP</th><th>产 NADH</th><th>产 FADH₂</th><th>按 2.5 / 1.5 折算</th></tr></thead>
+        <tbody>
+          <tr><td>糖酵解（胞质）</td><td>2</td><td>2</td><td>0</td><td>2 + 5 = 7</td></tr>
+          <tr><td>丙酮酸 → 乙酰 CoA</td><td>0</td><td>2</td><td>0</td><td>5</td></tr>
+          <tr><td>三羧酸循环</td><td>2（GTP）</td><td>6</td><td>2</td><td>2 + 15 + 3 = 20</td></tr>
+          <tr class="hi"><td><b>合计</b></td><td>4</td><td>10</td><td>2</td><td><b>32</b></td></tr>
+        </tbody>
+      </table>
+      <p class="tbl-note">若胞质中的 2 个 NADH 走<b>甘油磷酸穿梭</b>进入线粒体（变成 FADH₂），则少 2 个 ATP，得 <b>30</b>。走<b>苹果酸-天冬氨酸穿梭</b>则仍是 <b>32</b>。老教材按 3 / 2 折算会得到 36～38，注意版本差异。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 微生物 ============ -->
+<section class="section alt" id="microbe">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">06 / 微生物篇</p>
+      <h2>细菌没有线粒体，照样玩得转</h2>
+      <p class="sec-desc">学微生物的时候，最容易把线粒体的那套图硬套到细菌上。其实结构换了、方向换了，道理一个字没变。</p>
+    </header>
+
+    <div class="grid2">
+      <article class="card">
+        <h3>结构对位表</h3>
+        <table class="tbl compact mini">
+          <thead><tr><th>项目</th><th>线粒体</th><th>细菌</th></tr></thead>
+          <tbody>
+            <tr><td>场所</td><td>内膜（嵴）</td><td>质膜（细胞膜）</td></tr>
+            <tr><td>P 侧（质子多、带正电）</td><td>膜间隙</td><td>胞外 / 周质空间</td></tr>
+            <tr><td>N 侧</td><td>基质</td><td>细胞质</td></tr>
+            <tr><td>ATP 合成位置</td><td>基质</td><td>细胞质</td></tr>
+            <tr><td>ATP 合酶朝向</td><td>F₁ 朝向基质</td><td>F₁ 朝向细胞质</td></tr>
+            <tr><td>Δψ / ΔpH 分工</td><td>Δψ 为主</td><td>ΔpH 往往更大</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>细菌的呼吸链是「可换件」的</h3>
+        <p>大肠杆菌一条链上可以有多种<b>脱氢酶</b>和多种<b>末端氧化酶</b>，按氧气多少切换：</p>
+        <ul class="bullets">
+          <li><b>好氧</b>：末端氧化酶把电子交给 O₂。</li>
+          <li><b>硝酸盐呼吸</b>（反硝化）：终末受体是 NO₃⁻ → NO₂⁻ → NO → N₂O → N₂。</li>
+          <li><b>硫酸盐呼吸</b>：终末受体是 SO₄²⁻，产物 H₂S。</li>
+          <li><b>延胡索酸呼吸</b>：终末受体是延胡索酸，产物琥珀酸。</li>
+        </ul>
+        <p class="note">受体换了，但<b>「泵质子 → 造梯度 → 回流做 ATP」</b>这条主线一模一样。所以厌氧菌也能氧化磷酸化，只是末端受体不是氧。</p>
+      </article>
+
+      <article class="card">
+        <h3>最纯粹的证据：细菌视紫红质</h3>
+        <p>盐沼盐杆菌（<i>Halobacterium salinarum</i>）的紫膜上只有一种蛋白 —— <b>细菌视紫红质</b>。它吸收光子后<b>直接</b>把一个质子从胞内搬到胞外，<b>完全不传电子</b>。</p>
+        <p class="note">整个细菌就靠这一台「光驱动质子泵」造出梯度，再用 F₀F₁ 做 ATP。这是化学渗透学说最干净的活体证明，也是第 04 节那个脂质体实验的原型。</p>
+      </article>
+
+      <article class="card">
+        <h3>梯度还能拿来干别的</h3>
+        <ul class="bullets">
+          <li><b>驱动鞭毛</b>：鞭毛马达靠 H⁺（或 Na⁺）回流转动，不是直接烧 ATP。</li>
+          <li><b>次级主动运输</b>：乳酸菌等靠质子同向转运吸收乳糖、氨基酸；反向转运排出 Na⁺、抗生素。</li>
+          <li><b>耐酸机制</b>：质子泵把误入胞内的 H⁺ 泵出去，维持胞内 pH 稳定。</li>
+          <li><b>逆电子传递</b>：硝化细菌、硫氧化细菌靠 Δp「倒着推」电子，把 NAD(P)⁺ 还原，供 CO₂ 固定用。耗能，但必要。</li>
+          <li><b>产热</b>：部分细菌和褐色脂肪组织一样，用解偶联蛋白把梯度直接变成热。</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="callout">
+      <p><b>考研常考的一句话：</b>原核生物的氧化磷酸化在<b>细胞膜</b>上进行，质子被泵到<b>细胞外</b>；真核生物在<b>线粒体内膜</b>上进行，质子被泵到<b>膜间隙</b>。两者的化学渗透机制完全相同。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 考点 ============ -->
+<section class="section" id="exam">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">07 / 考点</p>
+      <h2>高频考法与易混点</h2>
+      <p class="sec-desc">下面这些是这块内容真正会被问到的角度。点开每一条看要点。</p>
+    </header>
+
+    <div class="acc" id="acc">
+      <details open>
+        <summary>化学渗透学说的基本要点（简答题模板）</summary>
+        <div class="acc-body">
+          <ol class="num-list">
+            <li>线粒体内膜（细菌质膜）具有<b>质子不通透性</b>，是能量转换的结构基础。</li>
+            <li>呼吸链的电子传递<b>与质子泵出相偶联</b>，把 H⁺ 从 N 侧泵到 P 侧。</li>
+            <li>被泵出的质子不能自由返回，形成<b>跨膜质子电化学梯度</b>（Δψ + ΔpH = Δp）。</li>
+            <li>H⁺ 经 ATP 合酶 <b>F₀</b> 通道顺梯度回流，释放自由能。</li>
+            <li>回流的能量通过 <b>F₁</b> 的构象变化（结合改变机制）驱动 ADP + Pi → ATP。</li>
+            <li>因此 ATP 合成的直接能源不是电子，而是<b>质子梯度</b>。</li>
+          </ol>
+        </div>
+      </details>
+
+      <details>
+        <summary>氧化磷酸化、底物水平磷酸化、光合磷酸化，三者怎么分</summary>
+        <div class="acc-body">
+          <table class="tbl compact mini">
+            <thead><tr><th>类型</th><th>能量来源</th><th>是否需要膜与梯度</th><th>例子</th></tr></thead>
+            <tbody>
+              <tr><td>氧化磷酸化</td><td>电子传递释放的自由能</td><td>需要</td><td>线粒体内膜、细菌质膜</td></tr>
+              <tr><td>光合磷酸化</td><td>光能驱动的电子传递</td><td>需要</td><td>叶绿体类囊体膜、紫膜</td></tr>
+              <tr><td>底物水平磷酸化</td><td>高能底物基团转移</td><td>不需要</td><td>糖酵解、TCA 中的琥珀酰 CoA</td></tr>
+            </tbody>
+          </table>
+          <p class="note">记忆钩子：只要答案里出现「膜」「梯度」「ATP 合酶」，就是化学渗透路径；出现「~P 直接转移」，就是底物水平磷酸化。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>P/O 比为什么是 2.5 和 1.5（而不是老书的 3 和 2）</summary>
+        <div class="acc-body">
+          <p>P/O 比 = 每消耗 1 个氧原子（即每对电子传给 ½ O₂）所酯化生成的 ATP 分子数。</p>
+          <ul class="bullets">
+            <li>NADH 路线：复合体 I 泵 4 + III 泵 4 + IV 泵 2 = <b>10 个 H⁺</b>；10 ÷ 4 ≈ <b>2.5</b>。</li>
+            <li>琥珀酸路线：绕过复合体 I，只有 4 + 2 = <b>6 个 H⁺</b>；6 ÷ 4 ≈ <b>1.5</b>。</li>
+          </ul>
+          <p class="note">老教材用「每 ATP 需 3 个 H⁺」估算，于是得 10/3 ≈ 3、6/3 = 2。差别只在质子/ATP 的折算系数，不是机制变了。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>「为什么」类分析题的通用思路</summary>
+        <div class="acc-body">
+          <p>所有这类题都走同一条推理链：<b>某环节被动了 → 梯度怎么变 → 回流量怎么变 → ATP 怎么变 → 电子传递受不受反馈抑制 → 耗氧和产热怎么变。</b></p>
+          <table class="tbl compact mini">
+            <thead><tr><th>处理</th><th>梯度</th><th>电子传递</th><th>ATP</th><th>耗氧</th><th>产热</th></tr></thead>
+            <tbody>
+              <tr><td>解偶联剂 DNP</td><td class="bad">↓ 塌陷</td><td class="ok">↑ 加快</td><td class="bad">↓↓ 停止</td><td class="ok">↑↑</td><td class="bad">↑↑</td></tr>
+              <tr><td>寡霉素</td><td class="ok">↑ 升高</td><td class="bad">↓ 憋停</td><td class="bad">停止</td><td class="bad">↓↓</td><td>↓</td></tr>
+              <tr><td>氰化物</td><td class="bad">↓ 逐渐消失</td><td class="bad">停止</td><td class="bad">停止</td><td class="bad">↓</td><td>—</td></tr>
+              <tr><td>缬氨霉素（K⁺ 载体）</td><td class="warn">Δψ 抵消</td><td class="warn">部分加快</td><td class="warn">下降</td><td class="ok">↑</td><td>↑</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details>
+        <summary>ATP 合酶的结构细节</summary>
+        <div class="acc-body">
+          <ul class="bullets">
+            <li><b>F₀</b>：疏水，嵌在膜内，组成 <span class="mono">ab₂c<sub>n</sub></span>；c 环是<b>质子通道兼转子</b>。寡霉素结合在 F₀。</li>
+            <li><b>F₁</b>：亲水，伸向基质，组成 <span class="mono">α₃β₃γδε</span>；α 和 β 交错排成六聚体。</li>
+            <li><b>催化位点</b>全在 <b>β 亚基</b>上，三个位点构象不同、轮流工作。</li>
+            <li><b>γ</b> 是中央旋转轴，与 <span class="mono">ε</span> 一起随 c 环转；δ 连接 F₁ 与 F₀ 的 <span class="mono">b₂</span>。</li>
+            <li>三种构象：<b>L（松散）</b>结合 ADP+Pi → <b>T（紧密）</b>催化成 ATP → <b>O（开放）</b>释放 ATP。</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>易混点速辨</summary>
+        <div class="acc-body">
+          <table class="tbl compact mini">
+            <thead><tr><th>一对概念</th><th>区别</th></tr></thead>
+            <tbody>
+              <tr><td>电子传递链 / 氧化磷酸化</td><td>前者只是「传电子」，后者是「传电子 + 磷酸化」的全过程，需要 ATP 合酶参与。</td></tr>
+              <tr><td>呼吸链 / 光合链</td><td>前者最终把电子交给 O₂（或其它末端受体），后者光激发电子后循环回到起点。</td></tr>
+              <tr><td>抑制剂 / 解偶联剂</td><td>堵通路 vs 开旁路。前者 ATP 与耗氧一起降，后者 ATP 降而耗氧升。</td></tr>
+              <tr><td>Δψ / ΔpH</td><td>电荷分量 vs 浓度分量，二者共同构成 Δp，可以互相部分转化。</td></tr>
+              <tr><td>F₀ / F₁</td><td>膜内的质子通道（旋转）vs 膜外的催化头（合成）。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 自测 ============ -->
+<section class="section alt" id="quiz">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">08 / 自测</p>
+      <h2>十二道题，查漏</h2>
+      <p class="sec-desc">选中即判，答完立刻看到解析。全部答完会出现得分。</p>
+    </header>
+
+    <div class="quiz" id="quiz"></div>
+
+    <div class="quiz-result" id="quizResult" hidden>
+      <div class="qr-ring"><span id="qrScore">0</span><small>/ 12</small></div>
+      <div class="qr-text">
+        <b id="qrTitle">—</b>
+        <p id="qrMsg">—</p>
+        <button class="btn btn-sm" id="quizReset" type="button">重做一遍</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p class="foot-title">化学渗透学说 · 互动图解</p>
+    <p class="foot-sub">为考研生物化学与微生物学复习而做。所有数值采用现行教材口径（P/O = 2.5 / 1.5，葡萄糖 30～32 ATP）。</p>
+    <div class="foot-links">
+      <button class="btn btn-sm" id="shareBtn2" type="button">复制链接分享给同学</button>
+      <a class="btn btn-sm" href="#top" id="backTop">回到顶部 ↑</a>
+    </div>
+    <p class="foot-tip">提示：本页为纯静态网页，无需联网加载任何第三方库，可离线保存或转发。</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/etc-sim.js" defer></script>
+<script src="assets/atpase.js" defer></script>
+<script src="assets/vesicle.js" defer></script>
+<script src="assets/main.js" defer></script>
+</body>
+</html>
