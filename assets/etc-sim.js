@@ -388,8 +388,7 @@
     c.textAlign = 'left';
     c.font = '11.5px "PingFang SC","Microsoft YaHei",sans-serif';
     c.fillStyle = P.dim;
-    c.fillText('½O₂ + 2H⁺', 640, 292);
-    c.fillText('+ 2e⁻ → H₂O', 640, 308);
+    c.fillText('½O₂ + 2H⁺ + 2e⁻ → H₂O', 604, 436);
 
     c.textAlign = 'left';
   }
