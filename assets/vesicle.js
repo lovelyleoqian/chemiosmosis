@@ -186,9 +186,13 @@
       while (S.atpAngle >= 1) {
         S.atpAngle -= 1;
         S.atpTotal++;
+        var a = rotor + rnd(0, TAU);
+        if (atps.length > 10) atps.shift();
         atps.push({
-          x: AT_X + rnd(-8, 8), y: VES.cy - 74,
-          vx: rnd(-16, 16), vy: rnd(-26, -12),
+          x: AT_X + Math.sin(a) * 30,
+          y: VES.cy - 68 + Math.cos(a) * 30,
+          vx: Math.sin(a) * 22 + rnd(-8, 8),
+          vy: Math.cos(a) * 18 + rnd(-8, 8),
           life: 0, max: 1.9
         });
       }
