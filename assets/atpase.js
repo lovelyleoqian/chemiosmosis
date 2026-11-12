@@ -557,12 +557,16 @@
       var st = ((phase + k / 3) % 1 + 1) % 1;
       var state = st < 1 / 3 ? 'L' : st < 2 / 3 ? 'T' : 'O';
       if (prevBetaState[k] === 'T' && state === 'O' && S.flow > 0.02) {
+        // 从对应 β 亚基外缘朝外飘散，避免堆在 F₁ 上糊成一团
         var a = k * TAU / 6 + 0.52;
+        var ux = Math.sin(a), uy = Math.cos(a);
+        if (atps.length > 9) atps.shift();
         atps.push({
-          x: F1.cx + Math.sin(a) * (F1.rx - 40),
-          y: F1.cy + Math.cos(a) * (F1.ry - 14) + 10,
-          vx: rnd(-24, 24), vy: rnd(-34, -16),
-          life: 0, max: 1.8
+          x: F1.cx + ux * (F1.rx + 6),
+          y: F1.cy + uy * (F1.ry + 8),
+          vx: ux * 30 + rnd(-8, 8),
+          vy: uy * 20 + rnd(-8, 8) + 8,
+          life: 0, max: 1.6
         });
       }
       prevBetaState[k] = state;
