@@ -187,6 +187,7 @@ html[data-theme="light"] .btn-primary{color:#fff}
 .hero-facts span{display:block;margin-top:6px;font-size:13px;color:var(--txt-mute);line-height:1.6}
 
 /* ---------------- section shell ---------------- */
+section[id],header[id]{scroll-margin-top:76px}
 .section{padding:88px 0;border-bottom:1px solid var(--line);position:relative}
 .section.alt{background:linear-gradient(180deg,var(--bg-soft),transparent 70%)}
 .sec-head{max-width:74ch;margin:0 0 40px}
@@ -622,11 +623,11 @@ html[data-theme="light"] .toast{color:#fff}
   .acc-body{padding:0 16px 18px 18px}
   .proof-grid{grid-template-columns:1fr}
   .quiz-result{flex-direction:column;text-align:center;align-items:center}
-  .tbl{font-size:13px}
+  .tbl{font-size:13px;min-width:0}
   .tbl thead th,.tbl td{padding:10px 11px}
-  .tablewrap{overflow-x:auto}
-  .tbl{min-width:560px}
-  .tbl.mini{min-width:420px}
+  .tablewrap,.acc-body,.card{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+  .tablewrap .tbl,.acc-body .tbl,.card .tbl{min-width:520px}
+  .tablewrap .tbl.mini,.acc-body .tbl.mini,.card .tbl.mini{min-width:400px}
 }
 @media (max-width:520px){
   body{font-size:15px}

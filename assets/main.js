@@ -427,7 +427,7 @@
     }
   ];
 
-  var quizRoot = $('quiz');
+  var quizRoot = $('quizList');
   var quizResult = $('quizResult');
   var qrScore = $('qrScore');
   var qrTitle = $('qrTitle');
